@@ -1,0 +1,28 @@
+<template name="Rooms">
+  {{#each rooms}}
+    <div class="row-fluid">
+      {{#each this}}
+        <div class="span4">
+          {{>Room}}      
+        </div>
+      {{/each}}
+    </div>
+  {{/each}}
+</template>
+
+<template name="Room">
+  <div class="room">
+    <h2><i class="icon-bullseye"></i> {{name}}</h2>
+    {{#with room}}
+      <table class="table table-condensed">
+      {{#each transactions}}
+        <tr>
+          <td><i class="icon-sign{{action}}"></i></td>
+          <td>{{name}}</td>
+          <td>{{formatDatetime createdAt}}</td>
+        </tr>
+      {{/each}}
+      </table>
+    {{/with}}
+  </div>
+</template>
