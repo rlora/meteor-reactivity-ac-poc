@@ -11,15 +11,42 @@ Template.Rooms.rooms = function() {
 };
 
 Template.Room.room = function() {
-  var transactions = RoomTransactions.find({
+  var occupancy, transactions = RoomTransactions.find({
     "parent": this._id
   }, {
+    "limit": 7,
     "sort": {
       "createdAt": -1
     }
   });
+  occupancy = RoomResidents.find({
+    "parent": this._id
+  }).count();
 
   return {
-    "transactions": transactions
+    "transactions": transactions,
+    "occupancy": occupancy,
+    "occupancyPercentage": 100 * (occupancy / this.capacity),
+    "remainingPercentage": 100 * (1 - (occupancy / this.capacity))
   };
 };
+
+Template.Room.events({
+  "click a[data-room-id]": function(e) {
+    var link, roomId = e.target.getAttribute("data-room-id");
+    if (roomId === null) {
+      link = $(e.target).parents("a[data-room-id]")[0];
+      roomId = link.getAttribute("data-room-id");
+    }
+    if (roomId) {
+      Session.set("roomId", roomId);
+      $(".room-residents").modal();
+    }
+  }
+});
+
+Template.Rooms.events({
+  "click button[data-action]": function(e) {
+    Meteor.call("RoomTransactions.simulate");
+  }
+});

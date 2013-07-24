@@ -1,0 +1,21 @@
+<template name="RoomResidentsModal">
+  <div class="modal hide fade room-residents">
+    {{> RoomResidents}}
+  </div>
+</template>
+
+<template name="RoomResidents">
+  {{#with info}}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Room {{room.name}} ({{count}}/{{room.capacity}})</h3>
+  </div>
+  <div class="modal-body">
+    <p>
+    {{#each residents}}
+      <span class="label label-inverse">{{name}}</span>
+    {{/each}}
+    </p>
+  </div>
+  {{/with}}
+</template>

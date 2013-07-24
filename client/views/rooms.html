@@ -1,20 +1,37 @@
 <template name="Rooms">
+  <div style="margin-bottom: 20px;">
+    <button class="btn btn-large btn-danger" type="button" data-action="simulate">simulate 300 transactions</button>
+  </div>
   {{#each rooms}}
     <div class="row-fluid">
       {{#each this}}
         <div class="span4">
-          {{>Room}}      
+          {{> Room}}
         </div>
       {{/each}}
     </div>
   {{/each}}
+  {{> RoomResidentsModal}}
 </template>
 
 <template name="Room">
   <div class="room">
-    <h2><i class="icon-bullseye"></i> {{name}}</h2>
     {{#with room}}
+      <div class="header">
+        <strong>Room {{../name}}</strong>
+        <div class="pull-right">
+        <span class="label label-inverse">{{../capacity}} people capacity</span>
+        <i class="icon-group"></i> <a href="#" data-toggle="modal" data-room-id="{{../_id}}"><span class="badge badge-important">{{occupancy}}</span></a>
+        </div>
+      </div>
+      <div class="progress">
+        <div class="bar bar-danger" style="width: {{occupancyPercentage}}%;"></div>
+        <div class="bar bar-success" style="width: {{remainingPercentage}}%;"></div>
+      </div>
       <table class="table table-condensed">
+        <tr>
+          <th colspan="3">last transactions</th>
+        </tr>
       {{#each transactions}}
         <tr>
           <td><i class="icon-sign{{action}}"></i></td>

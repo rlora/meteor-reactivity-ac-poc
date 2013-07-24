@@ -47,7 +47,59 @@ AC.RoomTransactionModel = AC.Model.extend({
   //
   _serverMethods: function() {
     if (Meteor.isServer) {
-      return {};
+      return {
+        //
+        // Create entry
+        //
+        "createEntry": function(roomId, action, name) {
+          var room = Rooms.findOne(roomId);
+          check(room, Object);
+          check(action, String);
+          check(name, String);
+          RoomResidents.remove({
+            "name": name
+          });
+          RoomTransactions.insert({
+            "parent": roomId,
+            "action": action,
+            "name": name
+          });
+          if (action === "in") {
+            RoomResidents.insert({
+              "parent": roomId,
+              "name": name
+            });
+          }
+        },
+        //
+        // Simulate transactions using random data
+        //
+        "simulate": function() {
+          var rooms, transactions = 300, result = Meteor.http.get(Meteor.absoluteUrl("/randomData.json"));
+          // Reset transactions to avoid overloading
+          RoomResidents.remove({});
+          RoomTransactions.remove({});
+          // Insert rooms only the first time
+          rooms = Rooms.find().fetch();
+          if (rooms.length === 0) {
+            _.each(result.data.rooms, function(room) {
+              Rooms.insert(room);
+            });
+            rooms = Rooms.find().fetch();
+          }
+          // Simulate entries
+          _.times(transactions, function() {
+            var person = result.data.people[_.random(result.data.people.length - 1)];
+            Meteor.setTimeout(function() {
+              var roomId = rooms[_.random(rooms.length - 1)]._id;
+              Meteor.call("RoomTransactions.createEntry", roomId, "in", person);
+              Meteor.setTimeout(function() {
+                Meteor.call("RoomTransactions.createEntry", roomId, "out", person);
+              }, _.random(1000, 1000 * 60));
+            }, _.random(1000, 1000 * 60));
+          });
+        }
+      };
     }
   }(),
 
@@ -101,15 +153,15 @@ RoomTransactions.before("update", function(userId, selector, modifier, options) 
 RoomTransactions.allow({
   insert: function(userId, doc) {
     console.log("Allow.insert: ", userId, doc);
-    return true;
+    return false;
   },
   update: function(userId, doc, fields, modifier) {
     console.log("Allow.update: ", userId, doc, fields, modifier);
-    return true;
+    return false;
   },
   remove: function(userId, doc) {
     console.log("Allow.remove: ", userId, doc);
-    return true;
+    return false;
   },
   transform: null
 });

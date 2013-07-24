@@ -1,6 +1,23 @@
 .icon-signin {
-	color: green;
+  color: green;
 }
 .icon-signout {
-	color: red;
+  color: red;
+}
+
+.room {
+  height: 300px;
+  overflow: hidden;
+  background-color: #F2E9E1;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.room .header, .room table {
+  margin: 10px;
+}
+
+.room .progress {
+  margin-bottom: 5px;
 }
