@@ -1,5 +1,9 @@
 <template name="Rooms">
   <div style="margin-bottom: 20px;">
+    <p>
+      Press the button to simulate 300 transactions. The transactions are generated on the server to <strong>simulate during a short period of time people arriving and leaving a building</strong>.
+      The interface will react in real time to changes affecting the data in the server. <strong>Source</strong>: <a href="https://github.com/rlora/meteor-reactivity-ac-poc" target="_blank">https://github.com/rlora/meteor-reactivity-ac-poc</a>
+    </p>
     <button class="btn btn-large btn-danger" type="button" data-action="simulate">simulate 300 transactions</button>
   </div>
   {{#each rooms}}
