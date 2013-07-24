@@ -14,7 +14,7 @@ Template.Room.room = function() {
   var occupancy, transactions = RoomTransactions.find({
     "parent": this._id
   }, {
-    "limit": 7,
+    "limit": 6,
     "sort": {
       "createdAt": -1
     }

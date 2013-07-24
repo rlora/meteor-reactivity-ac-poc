@@ -21,11 +21,11 @@
 <template name="Room">
   <div class="room">
     {{#with room}}
-      <div class="header">
+      <div class="header" style="text-align: center;">
         <strong>Room {{../name}}</strong>
-        <div class="pull-right">
-        <span class="label label-inverse">{{../capacity}} people capacity</span>
-        <i class="icon-group"></i> <a href="#" data-toggle="modal" data-room-id="{{../_id}}"><span class="badge badge-important">{{occupancy}}</span></a>
+        <div>
+          <span class="label label-inverse">{{../capacity}} people capacity</span>
+          <i class="icon-group"></i> <a href="#" data-toggle="modal" data-room-id="{{../_id}}"><span class="badge badge-important">{{occupancy}}</span></a>
         </div>
       </div>
       <div class="progress">
